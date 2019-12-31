@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import RegistrationForm from './RegistrationForm';
+import LogIn from './LogIn';
 
 test('renders learn react link', () => {
-  const { getByText } = render(<RegistrationForm />);
+  const { getByText } = render(<LogIn />);
   const linkElement = getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });

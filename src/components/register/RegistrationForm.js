@@ -17,7 +17,6 @@ const validateForm = (errors) => {
   return valid;
 }
 
-
 const validateEmptyForm = (state) => {
   if ((state.email == null || state.email.length == 0) || (state.fullName == null || state.fullName.length == 0)
     || (state.password == null || state.password.length == 0) || (state.confirmPassword == null || state.confirmPassword.length == 0)) {
@@ -132,46 +131,48 @@ class RegistrationForm extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="container">
-        <div className="main">
-
-          <section className="signup">
-            <div className="container">
-              <div className="signup-content">
-                <ToastContainer />
-                <form method="POST" id="signup-form" className="signup-form" onSubmit={this.handleSubmit} noValidate>
-                  <h2 className="form-title">Create account</h2>
-                  <div className="form-group">
-                    <input type="text" className="form-input" name='fullName' onBlur={this.handleChange} noValidate id="name" placeholder="Your Name" required />
-                    {errors.fullName.length > 0 &&
-                      <span className='error'>{errors.fullName}</span>}
-                  </div>
-                  <div className="form-group">
-                    <input type="email" className="form-input" name='email' onBlur={this.handleChange} noValidate id="email" placeholder="Your Email" required />
-                    {errors.email.length > 0 &&
-                      <span className='error'>{errors.email}</span>}
-                  </div>
-                  <div className="form-group">
-                    <input type="password" className="form-input" name='password' onBlur={this.handleChange} noValidate id="password" placeholder="Password" required />
-                    {errors.password.length > 0 &&
-                      <span className='error'>{errors.password}</span>}
-                  </div>
-                  <div className="form-group">
-                    <input type="password" className="form-input" name="confirmPassword" onBlur={this.handleChange} onChange={this.handlePasswordChange} id="confirmPassword" placeholder="Repeat your password" required />
-                    {errors.confirmPassword.length > 0 &&
-                      <span className='error'>{errors.confirmPassword}</span>}
-                  </div>
-                  <div className="form-group">
-                    <input type="submit" name="submit" id="submit" className="form-submit" value="Sign up" />
-                  </div>
-                </form>
-                <p className="loginhere">
-                  Already have an account? <a href="#" className="loginhere-link">Login here</a>
-                </p>
+      <div className="background">
+        <div className="reg-container">
+          <div className="main">
+            <section className="signup">
+              <div className="reg-container">
+                <div className="signup-content">
+                  <ToastContainer />
+                  <form method="POST" id="signup-form" className="signup-form" onSubmit={this.handleSubmit} noValidate>
+                    <h2 className="form-title">Create account</h2>
+                    <div className="form-group">
+                      <input type="text" className="form-input" name='fullName' onBlur={this.handleChange} noValidate id="name" placeholder="Your Name" required />
+                      {errors.fullName.length > 0 &&
+                        <span className='error'>{errors.fullName}</span>}
+                    </div>
+                    <div className="form-group">
+                      <input type="email" className="form-input" name='email' onBlur={this.handleChange} noValidate id="email" placeholder="Your Email" required />
+                      {errors.email.length > 0 &&
+                        <span className='error'>{errors.email}</span>}
+                    </div>
+                    <div className="form-group">
+                      <input type="password" className="form-input" name='password' onBlur={this.handleChange} noValidate id="password" placeholder="Password" required />
+                      {errors.password.length > 0 &&
+                        <span className='error'>{errors.password}</span>}
+                    </div>
+                    <div className="form-group">
+                      <input type="password" className="form-input" name="confirmPassword" onBlur={this.handleChange} onChange={this.handlePasswordChange} id="confirmPassword" placeholder="Repeat your password" required />
+                      {errors.confirmPassword.length > 0 &&
+                        <span className='error'>{errors.confirmPassword}</span>}
+                    </div>
+                    <div className="form-group">
+                      <input type="submit" name="submit" id="submit" className="form-submit" value="Sign up" />
+                      <input type='button' className="form-cancel" value='Cancel' />
+                    </div>
+                  </form>
+                  <p className="loginhere">
+                    Already have an account? <a href="#" className="loginhere-link">Login here</a>
+                  </p>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
+          </div>
         </div>
       </div>
     );

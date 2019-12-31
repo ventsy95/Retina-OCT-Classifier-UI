@@ -131,23 +131,28 @@ h2 {
 .clear {
   clear: both; }
 
-body {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #222;
-  font-weight: 400;
-  font-family: 'Montserrat';
-  background-image: url("./images/signup-bg.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  -moz-background-size: cover;
-  -webkit-background-size: cover;
-  -o-background-size: cover;
-  -ms-background-size: cover;
-  background-position: center center;
-  padding: 115px 0; }
+  .background {
+    width: 100vw;
+    height: 110vh;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #222;
+    font-weight: 400;
+    font-family: 'Montserrat';
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: linear-gradient(to left, rgb(116, 235, 213, 0.52), rgb(159, 172, 230, 0.52)), url("./images/oct2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    background-position: center center;
+    padding: 5% 0; 
+    z-index: 1;}
 
-.container {
+.reg-container {
   width: 660px;
   position: relative;
   margin: 0 auto; }
@@ -253,12 +258,13 @@ body {
       color: #222; }
 
 .form-submit {
-  width: 100%;
+  width: 48%;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
+  margin-left: 1.5%;
   padding: 17px 20px;
   box-sizing: border-box;
   font-size: 14px;
@@ -266,11 +272,27 @@ body {
   color: #fff;
   text-transform: uppercase;
   border: none;
-  background-image: -moz-linear-gradient(to left, #74ebd5, #9face6);
+  background-image: -moz-linear-gradient(to left, #7b7e7d, #9face6);
   background-image: -ms-linear-gradient(to left, #74ebd5, #9face6);
   background-image: -o-linear-gradient(to left, #74ebd5, #9face6);
   background-image: -webkit-linear-gradient(to left, #74ebd5, #9face6);
   background-image: linear-gradient(to left, #74ebd5, #9face6); }
+  
+  .form-cancel {
+    width: 48%;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -ms-border-radius: 5px;
+    margin-left: 1.5%;
+    padding: 17px 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 700;
+    color: #9face6;
+    text-transform: uppercase;
+    border: 1px solid #9face6; }
 
 input[type=checkbox]:not(old) {
   width: 2em;
