@@ -47,7 +47,7 @@ class LogIn extends Component {
           this.setState({loading:false});
         }, 1000)
 
-        if (err.response.status === 400) {
+        if (err.response != undefined && err.response.status === 400) {
           toast.error("Invalid credentials.")
         } else {
           toast.error(err.message)

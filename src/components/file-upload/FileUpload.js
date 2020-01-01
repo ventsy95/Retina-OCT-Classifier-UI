@@ -77,12 +77,14 @@ class FileUpload extends Component {
     for (var x = 0; x < this.state.selectedFile.length; x++) {
       data.append('image', this.state.selectedFile[x])
     }
+    
     axios.post("https://dev.retina.classifier:5000/predict", data, {
       onUploadProgress: ProgressEvent => {
         this.setState({
           loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
         })
       },
+      withCredentials: true
     })
       .then(res => { // then print response status
         console.log(res)
