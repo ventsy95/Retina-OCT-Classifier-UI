@@ -14,7 +14,7 @@ class NavigationBar extends Component {
         }
       }
 
-    logOut() {
+    logOut = () => {
         axios.get("https://dev.retina.classifier:5000/logout", { withCredentials: true })
           .then(res => {
             localStorage.setItem('isLoggedIn', false);
@@ -22,7 +22,7 @@ class NavigationBar extends Component {
             toast.info("Successfully logged out.")
           })
           .catch(err => {
-            if (err.response.status == 302) {
+            if (err.response != undefined && err.response.status == 302) {
               this.setState({ redirect: true })
               localStorage.setItem('isLoggedIn', false);
               toast.error("Unauthorized.")
@@ -41,7 +41,6 @@ class NavigationBar extends Component {
 
         return (
             <div className="hero-anime">
-                <ToastContainer />
                 { localStorage.getItem('isLoggedIn') == 'true' &&
                 <div className="navigation-wrap bg-light start-header start-style">
                     <div className="container">

@@ -69,9 +69,9 @@ class LogIn extends Component {
 
     return (
       <div className="limiter">
+        <ToastContainer />
         <div className="container-login100">
           <div className="login100-more"></div>
-          <ToastContainer />
           <div className="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
             <form method="POST" onSubmit={this.handleSubmit} className="login100-form validate-form">
               <span className="login100-form-title p-b-59">

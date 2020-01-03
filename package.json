@@ -18,6 +18,7 @@
     "axios": "^0.19.0",
     "axios-cookiejar-support": "^0.5.1",
     "bootstrap": "^4.4.1",
+    "framer-motion": "^1.7.0",
     "js-cookie": "^2.2.1",
     "react": "^16.12.0",
     "react-animated-css": "^1.2.1",

@@ -16,7 +16,7 @@
 .files{ position:relative}
 .files:after {  pointer-events: none;
   position: absolute;
-  top: 60px;
+  top: 50%;
   left: 0;
   width: 50px;
   right: 0;
@@ -106,9 +106,14 @@
 .select-file-text{
   display: block;
   width: 100%;
+  margin-top: 5%;
   font-family: Poppins-Bold;
   font-size: 29px;
   color: #333333;
   line-height: 1.2;
   text-align: center;
+}
+
+input[type=file]::-webkit-file-upload-button {
+  margin-top: 20%;
 }

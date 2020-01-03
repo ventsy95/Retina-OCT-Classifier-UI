@@ -8,7 +8,6 @@ import History from './components/history/History'
 import ProtectedRoute from './components/protected-route/ProtectedRoute'
 import { Route, NavLink, HashRouter, Switch } from "react-router-dom";
 
-
 class App extends Component {
 
   render() {
