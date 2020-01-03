@@ -4,6 +4,7 @@ import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faLongArrowAltRight } from '@fortawesome/fontawesome-free-solid'
+import { Route, NavLink, HashRouter } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import './LogIn.css';
 import './Util.css';
@@ -40,6 +41,7 @@ class LogIn extends Component {
           this.setState({loading:false});
         }, 1000)
         console.log(res.headers)
+        localStorage.setItem('isLoggedIn', true);
         console.log("REDIRECT TO INDEX PAGE")
       })
       .catch((err) => {
@@ -87,10 +89,7 @@ class LogIn extends Component {
                     {!this.state.loading && <span>Log In</span>}
 							    </button>
                 </div>
-
-                <a href="#" className="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
-                  Sign up
-                </a>
+                  <NavLink className="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30" to="/register">Sign up</NavLink>
               </div>
             </form>
           </div>

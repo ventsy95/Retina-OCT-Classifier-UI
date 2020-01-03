@@ -14,12 +14,13 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from '@fortawesome/fontawesome-free-solid'
+import { faFileAlt } from '@fortawesome/fontawesome-free-regular'
 import { faTimes } from '@fortawesome/fontawesome-free-solid'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
 const styles = theme => ({
   modal: {
@@ -62,7 +63,8 @@ class History extends Component {
       rowsPerPage: 5,
       page: 0,
       open: false,
-      selected_prediction: null
+      selected_prediction: null,
+      redirect: false,
     }
   }
 
@@ -89,36 +91,49 @@ class History extends Component {
   }
 
   getHistoryOfPredictions() {
-    console.log("GET")
     axios.get("https://dev.retina.classifier:5000/predictions", { withCredentials: true })
       .then(res => { // then print response status
-        console.log(res.data)
         this.setState({ predictions: res.data })
         toast.success('upload success')
       })
       .catch(err => { // then print response status
-        console.log(err)
-        toast.error('upload fail')
+        if(err.response.status == 302){
+          toast.error("Unauthorized.")
+          localStorage.setItem('isLoggedIn', false);
+          this.setState({ redirect: true });
+        } else{
+          toast.error(err.message)
+        }
       })
   }
 
   render() {
     const { predictions } = this.state;
     const { classes } = this.props;
+    const { redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to="/login" push={true} />
+    }
+
     return (
       <div>
         <Paper>
+          {predictions != null && predictions.length === 0 &&
+            <span className="empty-history-text">Your history does not contain any records.</span>}
           <TableContainer component={Paper}>
             <ToastContainer />
             <Table aria-label="customized table">
-              <TableHead>
-                <TableRow className="history-head">
-                  <StyledTableCell>Image name</StyledTableCell>
-                  <StyledTableCell>Disease</StyledTableCell>
-                  <StyledTableCell>Date</StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                </TableRow>
-              </TableHead>
+              {predictions != null && predictions.length > 0 &&
+                <TableHead>
+                  <TableRow className="history-head">
+                    <StyledTableCell>Image name</StyledTableCell>
+                    <StyledTableCell>Disease</StyledTableCell>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                  </TableRow>
+                </TableHead>
+              }
               <TableBody>
                 {predictions != null && (this.state.rowsPerPage > 0
                   ? predictions.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
@@ -129,24 +144,26 @@ class History extends Component {
                     <StyledTableCell>{row.predicted_disease}</StyledTableCell>
                     <StyledTableCell>{row.prediction_timestamp}</StyledTableCell>
                     <StyledTableCell><button type="button" onClick={() => this.handleOpen(row.record_id)}>
-                      <FontAwesomeIcon icon={faEdit} /></button></StyledTableCell>
+                      <FontAwesomeIcon icon={faFileAlt} size="2x" /></button></StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  {predictions != null &&
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
-                      count={predictions.length}
-                      rowsPerPage={this.state.rowsPerPage}
-                      page={this.state.page}
-                      onChangePage={this.handleChangePage}
-                      onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    />
-                  }
-                </TableRow>
-              </TableFooter>
+              {predictions != null && predictions.length > 0 &&
+                <TableFooter>
+                  <TableRow>
+                    {predictions != null &&
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        count={predictions.length}
+                        rowsPerPage={this.state.rowsPerPage}
+                        page={this.state.page}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                      />
+                    }
+                  </TableRow>
+                </TableFooter>
+              }
             </Table>
           </TableContainer>
         </Paper>
@@ -186,7 +203,7 @@ class History extends Component {
 }
 
 History.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(History);

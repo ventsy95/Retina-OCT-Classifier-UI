@@ -3,7 +3,7 @@ tr.history-head{
     background: -ms-linear-gradient(to left, #74ebd5, #9face6) !important;
     background: -o-linear-gradient(to left, #74ebd5, #9face6) !important;
     background: -webkit-linear-gradient(to left, #74ebd5, #9face6) !important;
-    background: linear-gradient(to left, #74ebd5, #9face6) !important;
+    background: #9face6;
 }
 
 .login100-form-btn {
@@ -64,4 +64,14 @@ tr.history-head{
   .close-button{
     position: absolute; 
     right:10px;
+  }
+
+  .empty-history-text{
+    display: block;
+    width: 100%;
+    font-family: Poppins-Bold;
+    font-size: 29px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
   }

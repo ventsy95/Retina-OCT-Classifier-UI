@@ -4,16 +4,65 @@ import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './FileUpload.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from '@fortawesome/fontawesome-free-solid'
+import { faTimes } from '@fortawesome/fontawesome-free-solid'
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import PropTypes from 'prop-types';
+import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
+
+const styles = theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    position: 'relative'
+  },
+});
 
 class FileUpload extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       selectedFile: null,
-      loaded: 0
+      loaded: 0,
+      open: false,
+      predicted_disease: '',
+      selected_image_base64: '',
+      redirect: false,
     }
-
   }
+
+  componentWillMount() {
+    this.isLoggedIn();
+  }
+
+  isLoggedIn() {
+    axios.get("https://dev.retina.classifier:5000/", { withCredentials: true })
+    .then(res => {
+      localStorage.setItem('isLoggedIn', true);
+    })
+      .catch(err => { // then print response status
+        if(err.response.status == 302){
+          this.setState({ redirect: true })
+          localStorage.setItem('isLoggedIn', false);
+          toast.error("Unauthorized.")
+        } else{
+          toast.error(err.message)
+        }
+      })
+  }
+
   checkMimeType = (event) => {
     //getting file object
     let files = event.target.files
@@ -36,6 +85,7 @@ class FileUpload extends Component {
     }
     return true;
   }
+
   maxSelectFile = (event) => {
     let files = event.target.files
     if (files.length > 1) {
@@ -46,6 +96,7 @@ class FileUpload extends Component {
     }
     return true;
   }
+
   checkFileSize = (event) => {
     let files = event.target.files
     let size = 2000000
@@ -62,61 +113,149 @@ class FileUpload extends Component {
     }
     return true;
   }
+
   onChangeHandler = event => {
     var files = event.target.files
     if (this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)) {
       // if return true allow to setState
       this.setState({
         selectedFile: files,
-        loaded: 0
+        loaded: 0,
       })
     }
   }
+
   onClickHandler = () => {
     const data = new FormData()
     for (var x = 0; x < this.state.selectedFile.length; x++) {
       data.append('image', this.state.selectedFile[x])
     }
-    
-    axios.post("https://dev.retina.classifier:5000/predict", data, {
-      onUploadProgress: ProgressEvent => {
-        this.setState({
-          loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
-        })
-      },
-      withCredentials: true
-    })
+    axios.post("https://dev.retina.classifier:5000/predict", data, { withCredentials: true })
       .then(res => { // then print response status
-        console.log(res)
-        toast.success('upload success')
+        this.setState({ predicted_disease: res.data[0].predicted_disease });
+        this.getBase64(this.state.selectedFile[0]);
+        this.handleOpen()
+        toast.success('upload success');
       })
       .catch(err => { // then print response status
-        toast.error('upload fail')
+        if(err.response.status == 302){
+          this.setState({ redirect: true });
+          localStorage.setItem('isLoggedIn', false);
+          toast.error("Unauthorized.")
+        } else{
+          toast.error(err.message)
+        }
+      })
+  }
+
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  getBase64(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result)
+      this.setState({ selected_image_base64: reader.result });
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  }
+
+  savePrediction() {
+    const data = new FormData()
+    data.append('image', this.state.selectedFile[0]);
+    data.append('image_name', this.state.selectedFile[0].name);
+    data.append('predicted_disease', this.state.predicted_disease);
+    axios.post("https://dev.retina.classifier:5000/predictions", data, { withCredentials: true, maxRedirects: 0 })
+      .then(res => { // then print response status
+        console.log(res)
+        toast.success(res.data);
+        this.handleClose();
+      })
+      .catch(err => { // then print response status
+        if(err.response.status == 302){
+          this.setState({ redirect: true });
+          localStorage.setItem('isLoggedIn', false);
+          toast.error("Unauthorized.")
+        } else{
+          toast.error(err.message)
+        }
       })
   }
 
   render() {
+    const { classes } = this.props;
+
+    const { redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to="/login" push={true} />
+    }
+
     return (
       <div className="container">
         <div className="row">
-          <div className="offset-md-3 col-md-6">
+          <div className="file-pick-container">
             <div className="form-group files">
-              <label>Upload Your File </label>
+              <label>Select Your File </label>
               <input type="file" className="form-control" accept="image/*" onChange={this.onChangeHandler} />
             </div>
             <div className="form-group">
               <ToastContainer />
-              <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded, 2)}%</Progress>
-
             </div>
-
-            <button type="button" className="btn btn-success btn-block" onClick={this.onClickHandler}>Upload</button>
-
+            <div className="wrap-login100-form-btn">
+              <div className="login100-form-bgbtn"></div>
+              <button disabled={this.state.selectedFile == null} type="button" className="btn btn-success btn-block login100-form-btn" onClick={this.onClickHandler}>
+                <span>Check</span>
+              </button>
+            </div>
           </div>
         </div>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={this.state.open}
+          onClose={this.handleClose}
+          className={classes.modal}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={this.state.open}>
+            <div className={classes.paper}>
+              <div className="close-button">
+                <button type="button" onClick={this.handleClose}>
+                  <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
+              </div>
+              {this.state.selected_image_base64 ? <img className="prediction-image" src={this.state.selected_image_base64} /> : ''}
+              <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
+              <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
+              <div className="wrap-login100-form-btn">
+                <div className="login100-form-bgbtn"></div>
+                <button type="submit" className="login100-form-btn" onClick={() => this.savePrediction()}>
+                  <span>Save</span>
+                </button>
+              </div>
+            </div>
+          </Fade>
+        </Modal>
       </div>
     );
   }
 }
 
-export default FileUpload;
+FileUpload.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(FileUpload);

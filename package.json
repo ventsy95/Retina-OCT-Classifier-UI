@@ -23,6 +23,7 @@
     "react-animated-css": "^1.2.1",
     "react-circular-progressbar": "^2.0.3",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-show": "^3.0.4",
     "react-toastify": "^5.4.1",

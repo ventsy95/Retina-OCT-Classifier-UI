@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
+import { NavLink } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import './RegistrationForm.css';
 
@@ -162,11 +163,11 @@ class RegistrationForm extends Component {
                     </div>
                     <div className="form-group">
                       <input type="submit" name="submit" id="submit" className="form-submit" value="Sign up" />
-                      <input type='button' className="form-cancel" value='Cancel' />
+                      <NavLink to="/login"><input type='button' className="form-cancel" value='Cancel' /></NavLink>
                     </div>
                   </form>
                   <p className="loginhere">
-                    Already have an account? <a href="#" className="loginhere-link">Login here</a>
+                    Already have an account? <NavLink to="/login" className="loginhere-link">Login here</NavLink>
                   </p>
                 </div>
               </div>
