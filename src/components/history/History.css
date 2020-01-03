@@ -75,3 +75,9 @@ tr.history-head{
     line-height: 1.2;
     text-align: center;
   }
+
+  .history-container{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 13%;
+  }

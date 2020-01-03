@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { NavLink } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import './RegistrationForm.css';
+import { Redirect } from 'react-router-dom';
 
 const validEmailRegex =
   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -35,6 +36,7 @@ class RegistrationForm extends Component {
       email: null,
       password: null,
       confirmPassword: null,
+      redirect: false,
       errors: {
         fullName: '',
         email: '',
@@ -112,7 +114,10 @@ class RegistrationForm extends Component {
           console.log(res)
           toast.success('Successful registration.', {
             autoClose: 3000,
-            onClose: () => console.log("REDIRECT TO LOGIN PAGE")
+            onClose: () => {
+              this.setState({ redirect: true })
+              localStorage.setItem('isLoggedIn', false);
+            }
           });
         })
         .catch((err) => { // then print response status
@@ -130,6 +135,12 @@ class RegistrationForm extends Component {
 
   render() {
     const { errors } = this.state;
+
+    const { redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to="/login" push={true} />
+    }
 
     return (
       <div className="background">

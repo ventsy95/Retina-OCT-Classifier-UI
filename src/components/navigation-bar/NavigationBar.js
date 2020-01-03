@@ -1,12 +1,48 @@
 import React, { Component } from 'react';
 import './NavigationBar.css';
 import { NavLink } from "react-router-dom";
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import { Redirect } from 'react-router-dom';
 
 class NavigationBar extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+          redirect: false,
+        }
+      }
+
+    logOut() {
+        axios.get("https://dev.retina.classifier:5000/logout", { withCredentials: true })
+          .then(res => {
+            localStorage.setItem('isLoggedIn', false);
+            this.setState({ redirect: true })
+            toast.info("Successfully logged out.")
+          })
+          .catch(err => {
+            if (err.response.status == 302) {
+              this.setState({ redirect: true })
+              localStorage.setItem('isLoggedIn', false);
+              toast.error("Unauthorized.")
+            } else {
+              toast.error(err.message)
+            }
+          })
+      }
+
     render() {
+        const { redirect } = this.state
+
+        if (redirect) {
+          return <Redirect to="/login" push={true} />
+        }
+
         return (
             <div className="hero-anime">
+                <ToastContainer />
+                { localStorage.getItem('isLoggedIn') == 'true' &&
                 <div className="navigation-wrap bg-light start-header start-style">
                     <div className="container">
                         <div className="row">
@@ -21,7 +57,7 @@ class NavigationBar extends Component {
 
                                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                         <ul className="navbar-nav ml-auto py-4 py-md-0">
-                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4 active">
+                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                                                 <NavLink className="nav-link" to="/">Home</NavLink>
                                             </li>
                                             <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
@@ -30,12 +66,12 @@ class NavigationBar extends Component {
                                             <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                                                 <NavLink className="nav-link" to="/history">History</NavLink>
                                             </li>
-                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-1">
-                                            </li>
-                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-1">
+                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                                             </li>
                                             <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                                                <NavLink className="nav-link" to="/logout">Logout</NavLink>
+                                            </li>
+                                            <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                                                <button type="button" className="nav-link" onClick={this.logOut}>Logout</button>
                                             </li>
                                         </ul>
                                     </div>
@@ -44,6 +80,7 @@ class NavigationBar extends Component {
                         </div>
                     </div>
                 </div>
+    }
             </div>
         );
     }

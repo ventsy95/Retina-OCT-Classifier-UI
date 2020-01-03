@@ -21,19 +21,21 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import NavigationBar from '../navigation-bar/NavigationBar';
 
 const styles = theme => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center'
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    position: 'relative'
+    position: 'relative',
   },
 });
 
@@ -97,11 +99,11 @@ class History extends Component {
         toast.success('upload success')
       })
       .catch(err => { // then print response status
-        if(err.response.status == 302){
+        if (err.response.status == 302) {
           toast.error("Unauthorized.")
           localStorage.setItem('isLoggedIn', false);
           this.setState({ redirect: true });
-        } else{
+        } else {
           toast.error(err.message)
         }
       })
@@ -118,85 +120,90 @@ class History extends Component {
 
     return (
       <div>
-        <Paper>
-          {predictions != null && predictions.length === 0 &&
-            <span className="empty-history-text">Your history does not contain any records.</span>}
-          <TableContainer component={Paper}>
-            <ToastContainer />
-            <Table aria-label="customized table">
-              {predictions != null && predictions.length > 0 &&
-                <TableHead>
-                  <TableRow className="history-head">
-                    <StyledTableCell>Image name</StyledTableCell>
-                    <StyledTableCell>Disease</StyledTableCell>
-                    <StyledTableCell>Date</StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                  </TableRow>
-                </TableHead>
-              }
-              <TableBody>
-                {predictions != null && (this.state.rowsPerPage > 0
-                  ? predictions.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-                  : predictions
-                ).map(row => (
-                  <StyledTableRow key={row.record_id} hover>
-                    <StyledTableCell component="th" scope="row">{row.image_name}</StyledTableCell>
-                    <StyledTableCell>{row.predicted_disease}</StyledTableCell>
-                    <StyledTableCell>{row.prediction_timestamp}</StyledTableCell>
-                    <StyledTableCell><button type="button" onClick={() => this.handleOpen(row.record_id)}>
-                      <FontAwesomeIcon icon={faFileAlt} size="2x" /></button></StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-              {predictions != null && predictions.length > 0 &&
-                <TableFooter>
-                  <TableRow>
-                    {predictions != null &&
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        count={predictions.length}
-                        rowsPerPage={this.state.rowsPerPage}
-                        page={this.state.page}
-                        onChangePage={this.handleChangePage}
-                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                      />
-                    }
-                  </TableRow>
-                </TableFooter>
-              }
-            </Table>
-          </TableContainer>
-        </Paper>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={this.state.open}
-          onClose={this.handleClose}
-          className={classes.modal}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={this.state.open}>
-            <div className={classes.paper}>
-              <div className="close-button">
-                <button type="button" onClick={() => this.handleClose()}>
-                  <FontAwesomeIcon icon={faTimes} size="2x" />
-                </button>
+        <div className="top-nav">
+          <NavigationBar />
+        </div>
+        <div className="history-container">
+          <Paper>
+            {predictions != null && predictions.length === 0 &&
+              <span className="empty-history-text">Your history does not contain any records.</span>}
+            <TableContainer component={Paper}>
+              <ToastContainer />
+              <Table aria-label="customized table">
+                {predictions != null && predictions.length > 0 &&
+                  <TableHead>
+                    <TableRow className="history-head">
+                      <StyledTableCell>Image name</StyledTableCell>
+                      <StyledTableCell>Disease</StyledTableCell>
+                      <StyledTableCell>Date</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                }
+                <TableBody>
+                  {predictions != null && (this.state.rowsPerPage > 0
+                    ? predictions.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                    : predictions
+                  ).map(row => (
+                    <StyledTableRow key={row.record_id} hover>
+                      <StyledTableCell component="th" scope="row">{row.image_name}</StyledTableCell>
+                      <StyledTableCell>{row.predicted_disease}</StyledTableCell>
+                      <StyledTableCell>{row.prediction_timestamp}</StyledTableCell>
+                      <StyledTableCell><button type="button" onClick={() => this.handleOpen(row.record_id)}>
+                        <FontAwesomeIcon icon={faFileAlt} size="2x" /></button></StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+                {predictions != null && predictions.length > 0 &&
+                  <TableFooter>
+                    <TableRow>
+                      {predictions != null &&
+                        <TablePagination
+                          rowsPerPageOptions={[5, 10, 25]}
+                          count={predictions.length}
+                          rowsPerPage={this.state.rowsPerPage}
+                          page={this.state.page}
+                          onChangePage={this.handleChangePage}
+                          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        />
+                      }
+                    </TableRow>
+                  </TableFooter>
+                }
+              </Table>
+            </TableContainer>
+          </Paper>
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={this.state.open}
+            onClose={this.handleClose}
+            className={classes.modal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={this.state.open}>
+              <div className={classes.paper}>
+                <div className="close-button">
+                  <button type="button" onClick={() => this.handleClose()}>
+                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                  </button>
+                </div>
+                {this.state.selected_prediction ? <img className="prediction-image" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
+                <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
+                <div className="wrap-login100-form-btn">
+                  <div className="login100-form-bgbtn"></div>
+                  <button type="submit" className="login100-form-btn">
+                    <span>Export to PDF</span>
+                  </button>
+                </div>
               </div>
-              {this.state.selected_prediction ? <img className="prediction-image" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
-              <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
-              <div className="wrap-login100-form-btn">
-                <div className="login100-form-bgbtn"></div>
-                <button type="submit" className="login100-form-btn">
-                  <span>Export to PDF</span>
-                </button>
-              </div>
-            </div>
-          </Fade>
-        </Modal>
+            </Fade>
+          </Modal>
+        </div>
       </div>
     );
   }

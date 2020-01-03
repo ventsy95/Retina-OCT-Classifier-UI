@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faLongArrowAltRight } from '@fortawesome/fontawesome-free-solid'
 import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import './LogIn.css';
 import './Util.css';
@@ -16,7 +17,8 @@ class LogIn extends Component {
     this.state = {
       email: null,
       password: null,
-      loading: false
+      loading: false,
+      redirect: false
     };
   }
 
@@ -42,6 +44,7 @@ class LogIn extends Component {
         }, 1000)
         console.log(res.headers)
         localStorage.setItem('isLoggedIn', true);
+        this.setState({redirect: true});
         console.log("REDIRECT TO INDEX PAGE")
       })
       .catch((err) => {
@@ -58,6 +61,12 @@ class LogIn extends Component {
   }
 
   render() {
+    const { redirect } = this.state
+
+    if (redirect || localStorage.getItem('isLoggedIn') == 'true') {
+      return <Redirect to="/fileUpload" push={true} />
+    }
+
     return (
       <div className="limiter">
         <div className="container-login100">

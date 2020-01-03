@@ -13,12 +13,14 @@ import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
+import NavigationBar from '../navigation-bar/NavigationBar';
 
 const styles = theme => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center'
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -49,15 +51,15 @@ class FileUpload extends Component {
 
   isLoggedIn() {
     axios.get("https://dev.retina.classifier:5000/", { withCredentials: true })
-    .then(res => {
-      localStorage.setItem('isLoggedIn', true);
-    })
+      .then(res => {
+        localStorage.setItem('isLoggedIn', true);
+      })
       .catch(err => { // then print response status
-        if(err.response.status == 302){
+        if (err.response.status == 302) {
           this.setState({ redirect: true })
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
-        } else{
+        } else {
           toast.error(err.message)
         }
       })
@@ -138,11 +140,11 @@ class FileUpload extends Component {
         toast.success('upload success');
       })
       .catch(err => { // then print response status
-        if(err.response.status == 302){
+        if (err.response.status == 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
-        } else{
+        } else {
           toast.error(err.message)
         }
       })
@@ -180,11 +182,11 @@ class FileUpload extends Component {
         this.handleClose();
       })
       .catch(err => { // then print response status
-        if(err.response.status == 302){
+        if (err.response.status == 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
-        } else{
+        } else {
           toast.error(err.message)
         }
       })
@@ -200,55 +202,60 @@ class FileUpload extends Component {
     }
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="file-pick-container">
-            <div className="form-group files">
-              <label>Select Your File </label>
-              <input type="file" className="form-control" accept="image/*" onChange={this.onChangeHandler} />
-            </div>
-            <div className="form-group">
-              <ToastContainer />
-            </div>
-            <div className="wrap-login100-form-btn">
-              <div className="login100-form-bgbtn"></div>
-              <button disabled={this.state.selectedFile == null} type="button" className="btn btn-success btn-block login100-form-btn" onClick={this.onClickHandler}>
-                <span>Check</span>
-              </button>
-            </div>
-          </div>
+      <div>
+        <div className="top-nav">
+          <NavigationBar />
         </div>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={this.state.open}
-          onClose={this.handleClose}
-          className={classes.modal}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={this.state.open}>
-            <div className={classes.paper}>
-              <div className="close-button">
-                <button type="button" onClick={this.handleClose}>
-                  <FontAwesomeIcon icon={faTimes} size="2x" />
-                </button>
+        <div className="container">
+          <div className="row">
+            <div className="file-pick-container">
+              <div className="form-group files">
+                <label className="select-file-text">Select Your File </label>
+                <input type="file" className="form-control" accept="image/*" onChange={this.onChangeHandler} />
               </div>
-              {this.state.selected_image_base64 ? <img className="prediction-image" src={this.state.selected_image_base64} /> : ''}
-              <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
-              <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
+              <div className="form-group">
+                <ToastContainer />
+              </div>
               <div className="wrap-login100-form-btn">
                 <div className="login100-form-bgbtn"></div>
-                <button type="submit" className="login100-form-btn" onClick={() => this.savePrediction()}>
-                  <span>Save</span>
+                <button disabled={this.state.selectedFile == null} type="button" className="btn btn-success btn-block login100-form-btn" onClick={this.onClickHandler}>
+                  <span>Check</span>
                 </button>
               </div>
             </div>
-          </Fade>
-        </Modal>
+          </div>
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={this.state.open}
+            onClose={this.handleClose}
+            className={classes.modal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={this.state.open}>
+              <div className={classes.paper}>
+                <div className="close-button">
+                  <button type="button" onClick={this.handleClose}>
+                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                  </button>
+                </div>
+                {this.state.selected_image_base64 ? <img className="prediction-image" src={this.state.selected_image_base64} /> : ''}
+                <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
+                <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
+                <div className="wrap-login100-form-btn">
+                  <div className="login100-form-bgbtn"></div>
+                  <button type="submit" className="login100-form-btn" onClick={() => this.savePrediction()}>
+                    <span>Save</span>
+                  </button>
+                </div>
+              </div>
+            </Fade>
+          </Modal>
+        </div>
       </div>
     );
   }
