@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import './LogIn.css';
 import './Util.css';
+import { motion } from "framer-motion";
 
 class LogIn extends Component {
 
@@ -37,19 +38,19 @@ class LogIn extends Component {
     bodyFormData.set('email', this.state.email)
     bodyFormData.set('password', this.state.password)
 
-    axios.post("https://dev.retina.classifier:5000/login", bodyFormData, {withCredentials:true})
-      .then(res => { 
-        setTimeout(()=>{
-          this.setState({loading:false});
+    axios.post("https://dev.retina.classifier:5000/login", bodyFormData, { withCredentials: true })
+      .then(res => {
+        setTimeout(() => {
+          this.setState({ loading: false });
         }, 1000)
         console.log(res.headers)
         localStorage.setItem('isLoggedIn', true);
-        this.setState({redirect: true});
+        this.setState({ redirect: true });
         console.log("REDIRECT TO INDEX PAGE")
       })
       .catch((err) => {
-        setTimeout(()=>{
-          this.setState({loading:false});
+        setTimeout(() => {
+          this.setState({ loading: false });
         }, 1000)
 
         if (err.response != undefined && err.response.status === 400) {
@@ -68,7 +69,7 @@ class LogIn extends Component {
     }
 
     return (
-      <div className="limiter">
+      <motion.div className="limiter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <ToastContainer />
         <div className="container-login100">
           <div className="login100-more"></div>
@@ -96,14 +97,14 @@ class LogIn extends Component {
                   <button type="submit" className="login100-form-btn" disabled={this.state.loading}>
                     {this.state.loading && <FontAwesomeIcon icon={faSpinner} spin size="2x" />}
                     {!this.state.loading && <span>Log In</span>}
-							    </button>
+                  </button>
                 </div>
-                  <NavLink className="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30" to="/register">Sign up</NavLink>
+                <NavLink className="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30" to="/register">Sign up</NavLink>
               </div>
             </form>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 }

@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import './RegistrationForm.css';
 import { Redirect } from 'react-router-dom';
+import { motion } from "framer-motion";
 
 const validEmailRegex =
   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -143,7 +144,7 @@ class RegistrationForm extends Component {
     }
 
     return (
-      <div className="background">
+      <motion.div className="background" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <div className="reg-container">
           <div className="main">
             <section className="signup">
@@ -183,10 +184,9 @@ class RegistrationForm extends Component {
                 </div>
               </div>
             </section>
-
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 }

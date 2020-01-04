@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
+import { motion } from "framer-motion";
 
 const styles = theme => ({
   modal: {
@@ -202,7 +203,7 @@ class FileUpload extends Component {
     }
 
     return (
-      <div>
+      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
         <div className="top-nav">
           <NavigationBar />
         </div>
@@ -256,7 +257,7 @@ class FileUpload extends Component {
             </Fade>
           </Modal>
         </div>
-      </div>
+      </motion.div>
     );
   }
 }

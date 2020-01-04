@@ -7,14 +7,15 @@ import LogIn from './components/login/LogIn'
 import History from './components/history/History'
 import ProtectedRoute from './components/protected-route/ProtectedRoute'
 import { Route, NavLink, HashRouter, Switch } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
 class App extends Component {
 
   render() {
     return (
       <div>
-        <HashRouter>
           <div>
+            <AnimatePresence>
             <Switch>
               <Route path='/login' component={LogIn} />
               <Route path="/register" component={RegistrationForm} />
@@ -25,8 +26,8 @@ class App extends Component {
                 </div>
               </div>
             </Switch>
+            </AnimatePresence>
           </div>
-        </HashRouter>
       </div >
     );
   }

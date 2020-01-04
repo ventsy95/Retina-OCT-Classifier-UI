@@ -22,6 +22,7 @@ import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
+import { AnimatePresence, motion } from "framer-motion";
 
 const styles = theme => ({
   modal: {
@@ -119,7 +120,7 @@ class History extends Component {
     }
 
     return (
-      <div>
+      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
         <div className="top-nav">
           <NavigationBar />
         </div>
@@ -204,7 +205,7 @@ class History extends Component {
             </Fade>
           </Modal>
         </div>
-      </div>
+      </motion.div>
     );
   }
 }
