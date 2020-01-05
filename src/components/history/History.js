@@ -23,6 +23,10 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
 import { AnimatePresence, motion } from "framer-motion";
+import * as AppActions from "../../AppActions";
+import ReactDOM from '@react-pdf/renderer';
+import MyDocument from '../pdf/MyDocument'
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const styles = theme => ({
   modal: {
@@ -63,7 +67,7 @@ class History extends Component {
     super(props);
     this.state = {
       predictions: null,
-      rowsPerPage: 5,
+      rowsPerPage: 7,
       page: 0,
       open: false,
       selected_prediction: null,
@@ -89,15 +93,25 @@ class History extends Component {
     this.setState({ open: false });
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
+    AppActions.isLoading(true);
     this.getHistoryOfPredictions();
   }
 
-  getHistoryOfPredictions() {
+  getHistoryOfPredictions = () => {
     axios.get("https://dev.retina.classifier:5000/predictions", { withCredentials: true })
       .then(res => { // then print response status
+        res.data = res.data.sort(function (var1, var2) {
+          var a = new Date(var1.prediction_timestamp), b = new Date(var2.prediction_timestamp);
+          if (a > b)
+            return -1;
+          if (a < b)
+            return 1;
+
+          return 0;
+        });
         this.setState({ predictions: res.data })
-        toast.success('upload success')
+        AppActions.isLoading(false);
       })
       .catch(err => { // then print response status
         if (err.response.status == 302) {
@@ -107,6 +121,7 @@ class History extends Component {
         } else {
           toast.error(err.message)
         }
+        AppActions.isLoading(false);
       })
   }
 
@@ -120,11 +135,12 @@ class History extends Component {
     }
 
     return (
-      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <div className="top-nav">
           <NavigationBar />
         </div>
         <div className="history-container">
+          <label className="history-text">History</label>
           <Paper>
             {predictions != null && predictions.length === 0 &&
               <span className="empty-history-text">Your history does not contain any records.</span>}
@@ -160,7 +176,7 @@ class History extends Component {
                     <TableRow>
                       {predictions != null &&
                         <TablePagination
-                          rowsPerPageOptions={[5, 10, 25]}
+                          rowsPerPageOptions={[5, 7, 10, 25, 50]}
                           count={predictions.length}
                           rowsPerPage={this.state.rowsPerPage}
                           page={this.state.page}
@@ -197,8 +213,10 @@ class History extends Component {
                 <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
-                  <button type="submit" className="login100-form-btn">
-                    <span>Export to PDF</span>
+                  <button type="button" className="login100-form-btn">
+                    <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf" className="pdf-export-button">
+                      {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Export to PDF')}
+                    </PDFDownloadLink>
                   </button>
                 </div>
               </div>

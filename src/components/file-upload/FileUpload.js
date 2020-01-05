@@ -5,8 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './FileUpload.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from '@fortawesome/fontawesome-free-solid'
-import { faTimes } from '@fortawesome/fontawesome-free-solid'
+import { faTimes, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -15,6 +14,7 @@ import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
 import { motion } from "framer-motion";
+import * as AppActions from "../../AppActions";
 
 const styles = theme => ({
   modal: {
@@ -43,6 +43,7 @@ class FileUpload extends Component {
       predicted_disease: '',
       selected_image_base64: '',
       redirect: false,
+      loading: false,
     }
   }
 
@@ -51,18 +52,21 @@ class FileUpload extends Component {
   }
 
   isLoggedIn() {
+    AppActions.isLoading(true);
     axios.get("https://dev.retina.classifier:5000/", { withCredentials: true })
       .then(res => {
         localStorage.setItem('isLoggedIn', true);
+        AppActions.isLoading(false);
       })
       .catch(err => { // then print response status
-        if (err.response.status == 302) {
+        if (err.response != undefined && err.response.status == 302) {
           this.setState({ redirect: true })
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
         } else {
           toast.error(err.message)
         }
+        AppActions.isLoading(false);
       })
   }
 
@@ -129,6 +133,7 @@ class FileUpload extends Component {
   }
 
   onClickHandler = () => {
+    AppActions.isLoading(true);
     const data = new FormData()
     for (var x = 0; x < this.state.selectedFile.length; x++) {
       data.append('image', this.state.selectedFile[x])
@@ -137,17 +142,19 @@ class FileUpload extends Component {
       .then(res => { // then print response status
         this.setState({ predicted_disease: res.data[0].predicted_disease });
         this.getBase64(this.state.selectedFile[0]);
+        AppActions.isLoading(false);
         this.handleOpen()
         toast.success('upload success');
       })
       .catch(err => { // then print response status
-        if (err.response.status == 302) {
+        if (err.response != undefined && err.response.status == 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
         } else {
           toast.error(err.message)
         }
+        AppActions.isLoading(false);
       })
   }
 
@@ -172,6 +179,7 @@ class FileUpload extends Component {
   }
 
   savePrediction() {
+    this.setState({ loading: true });
     const data = new FormData()
     data.append('image', this.state.selectedFile[0]);
     data.append('image_name', this.state.selectedFile[0].name);
@@ -181,15 +189,17 @@ class FileUpload extends Component {
         console.log(res)
         toast.success(res.data);
         this.handleClose();
+        this.setState({ loading: false });
       })
       .catch(err => { // then print response status
-        if (err.response.status == 302) {
+        if (err.response != undefined && err.response.status == 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
         } else {
           toast.error(err.message)
         }
+        this.setState({ loading: false });
       })
   }
 
@@ -230,6 +240,7 @@ class FileUpload extends Component {
             aria-describedby="transition-modal-description"
             open={this.state.open}
             onClose={this.handleClose}
+            contentStyle={{maxWidth: "95%"}}
             className={classes.modal}
             closeAfterTransition
             BackdropComponent={Backdrop}
@@ -249,8 +260,9 @@ class FileUpload extends Component {
                 <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
-                  <button type="submit" className="login100-form-btn" onClick={() => this.savePrediction()}>
-                    <span>Save</span>
+                  <button type="submit" className="login100-form-btn" disabled={this.state.loading} onClick={() => this.savePrediction()}>
+                  {this.state.loading && <FontAwesomeIcon icon={faSpinner} spin size="2x" />}
+                  {!this.state.loading && <span>Save</span>}
                   </button>
                 </div>
               </div>

@@ -79,5 +79,24 @@ tr.history-head{
   .history-container{
     width: 90%;
     margin-left: 5%;
-    margin-top: 5%;
+  }
+
+  .prediction-image{
+    max-width: 85%;
+    max-height: 85%;
+  }
+
+  .history-text{
+    display: block;
+    width: 100%;
+    margin-top: 3%;
+    font-family: Poppins-Bold;
+    font-size: 29px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .pdf-export-button{
+    color: white;
   }

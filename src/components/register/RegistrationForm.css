@@ -141,7 +141,7 @@ h2 {
     font-family: 'Montserrat';
     background-repeat: no-repeat;
     background-position: center;
-    background-image: linear-gradient(to left, rgb(116, 235, 213, 0.52), rgb(159, 172, 230, 0.52)), url("./images/oct2.jpg");
+    background-image: linear-gradient(to left, rgb(116, 235, 213, 0.52), rgb(159, 172, 230, 0.52));
     background-repeat: no-repeat;
     background-size: cover;
     -moz-background-size: cover;

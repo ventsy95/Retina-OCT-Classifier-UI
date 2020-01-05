@@ -48,7 +48,7 @@ class NavigationBar extends Component {
                             <div className="col-12">
                                 <nav className="navbar navbar-expand-md navbar-light">
 
-                                    <a className="navbar-brand" target="_blank"><img src="http://starfinderoptical.com/wp-content/uploads/2019/02/VisiontestIcon001-300x150.png" alt="" /></a>
+                                    <a className="navbar-brand" target="_blank"><img src="https://i.ibb.co/XFW0r4J/vision.png" alt="vision" border="0" /></a>
 
                                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                         <span className="navbar-toggler-icon"></span>
