@@ -160,7 +160,6 @@ class History extends Component {
       case 'age': this.setState({ age: value }); break;
       case 'gender': this.setState({ gender: value }); break;
     }
-    console.log(this.state)
   }
 
   render() {

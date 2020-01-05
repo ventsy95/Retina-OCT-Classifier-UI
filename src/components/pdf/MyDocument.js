@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
-import styled from '@react-pdf/styled-components';
+import * as Constants from './constants';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -16,6 +16,19 @@ const styles = StyleSheet.create({
     image: {
         width: '250px',
         height: '166px'
+    },
+    boldText: {
+        padding: 10, 
+        fontFamily: 'Helvetica-Bold'
+    },
+    text: {
+        padding: 0, 
+        fontFamily: 'Helvetica'
+    },
+    indentedText: {
+        padding: 0, 
+        marginLeft: 30,
+        fontFamily: 'Helvetica'
     }
 });
 
@@ -24,17 +37,18 @@ const MyDocument = (props) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <View style={styles.section}>
-                <Text>OCT Scan:</Text>
+                <Text style={styles.boldText}>OCT Scan:</Text>
                 <Image style={styles.image} src={`data:image/*;base64,${props.image}`} />
-                <Text>Diagnose: {props.diagnose}</Text>
+                <Text style={styles.boldText}>Diagnose: <Text style={styles.text}>{props.diagnose}</Text></Text>
             </View>
             <View style={styles.section}>
-                <Text>Personal info:</Text>
-                <View style={styles.section}>
-                    <Text style={{flexGrow: 0}}>Name: {props.fullName}</Text>
-                    <Text>Age: {props.age}</Text>
-                    <Text>Gender: {props.gender}</Text>
-                </View>
+                <Text style={styles.boldText}>Personal info:</Text>
+                <Text style={styles.boldText}>Name:</Text>
+                {props.fullName.split(" ").map(row => (
+                    <Text style={styles.indentedText}>{row}</Text>
+                ))}
+                <Text style={styles.boldText}>Age: <Text style={styles.text}>{props.age}</Text></Text>
+                <Text style={styles.boldText}>Gender: <Text style={styles.text}>{props.gender}</Text></Text>
             </View>
         </Page>
     </Document>
