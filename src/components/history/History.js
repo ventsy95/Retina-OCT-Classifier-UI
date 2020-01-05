@@ -17,6 +17,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileAlt } from '@fortawesome/fontawesome-free-regular'
 import { faTimes } from '@fortawesome/fontawesome-free-solid'
 import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem'
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
@@ -42,6 +44,12 @@ const styles = theme => ({
     padding: theme.spacing(2, 4, 3),
     position: 'relative',
   },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+  },
 });
 
 const StyledTableCell = withStyles(theme => ({
@@ -61,6 +69,21 @@ const StyledTableRow = withStyles(theme => ({
   },
 }))(TableRow);
 
+const genders = [
+  {
+    value: 'male',
+    label: 'male',
+  },
+  {
+    value: 'female',
+    label: 'female',
+  },
+  {
+    value: 'other',
+    label: 'other',
+  },
+];
+
 class History extends Component {
 
   constructor(props) {
@@ -72,6 +95,9 @@ class History extends Component {
       open: false,
       selected_prediction: null,
       redirect: false,
+      person_name: '',
+      age: '',
+      gender: '',
     }
   }
 
@@ -90,7 +116,7 @@ class History extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, person_name: '', age: '', gender: '' });
   };
 
   componentDidMount = () => {
@@ -123,6 +149,18 @@ class History extends Component {
         }
         AppActions.isLoading(false);
       })
+  }
+
+  handleFormChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+
+    switch (name) {
+      case 'fullName': this.setState({ person_name: value }); break;
+      case 'age': this.setState({ age: value }); break;
+      case 'gender': this.setState({ gender: value }); break;
+    }
+    console.log(this.state)
   }
 
   render() {
@@ -211,10 +249,31 @@ class History extends Component {
                 </div>
                 {this.state.selected_prediction ? <img className="prediction-image" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
                 <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
+                <div>
+                  <form className={classes.root} noValidate autoComplete="off">
+                    <TextField id="fullName" name='fullName' label="Full Name" variant="outlined" value={this.state.person_name} onChange={this.handleFormChange} onBlur={this.handleFormChange} />
+                    <TextField id="age" name='age' label="Age" type="number" variant="outlined" value={this.state.age} onChange={this.handleFormChange} onBlur={this.handleFormChange} />
+                    <TextField select id="gender" name='gender' label="Gender" variant="outlined" value={this.state.gender} onChange={this.handleFormChange} onBlur={this.handleFormChange} >
+                      {genders.map(option => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </form>
+                </div>
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
                   <button type="button" className="login100-form-btn">
-                    <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf" className="pdf-export-button">
+                    <PDFDownloadLink document={
+                    <MyDocument 
+                    diagnose={this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease} 
+                    fullName={this.state.person_name} 
+                    age={this.state.age} 
+                    gender={this.state.gender} 
+                    image={this.state.selected_prediction != null && this.state.selected_prediction.image} />} 
+                    fileName="export.pdf" 
+                    className="pdf-export-button">
                       {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Export to PDF')}
                     </PDFDownloadLink>
                   </button>

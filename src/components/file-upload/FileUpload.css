@@ -119,6 +119,6 @@ input[type=file]::-webkit-file-upload-button {
 }
 
 .prediction-image{
-  max-width: 85%;
+  max-width: 65%;
   max-height: 85%;
 }

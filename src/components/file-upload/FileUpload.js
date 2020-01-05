@@ -240,7 +240,6 @@ class FileUpload extends Component {
             aria-describedby="transition-modal-description"
             open={this.state.open}
             onClose={this.handleClose}
-            contentStyle={{maxWidth: "95%"}}
             className={classes.modal}
             closeAfterTransition
             BackdropComponent={Backdrop}
