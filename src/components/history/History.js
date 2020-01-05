@@ -266,7 +266,7 @@ class History extends Component {
                   <button type="button" className="login100-form-btn">
                     <PDFDownloadLink document={
                     <MyDocument 
-                    diagnose={this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease} 
+                    diagnosis={this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease} 
                     fullName={this.state.person_name} 
                     age={this.state.age} 
                     gender={this.state.gender} 
