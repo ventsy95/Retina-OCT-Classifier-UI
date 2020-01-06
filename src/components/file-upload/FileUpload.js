@@ -14,6 +14,8 @@ import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
 import { motion } from "framer-motion";
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem'
 import * as AppActions from "../../AppActions";
 
 const styles = theme => ({
@@ -30,7 +32,53 @@ const styles = theme => ({
     padding: theme.spacing(2, 4, 3),
     position: 'relative'
   },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+  },
 });
+
+
+const genders = [
+  {
+    value: 'male',
+    label: 'male',
+  },
+  {
+    value: 'female',
+    label: 'female',
+  },
+  {
+    value: 'other',
+    label: 'other',
+  },
+];
+
+
+const races = [
+  {
+    value: 'Caucasoid',
+    label: 'Caucasoid',
+  },
+  {
+    value: 'Mongoloid',
+    label: 'Mongoloid',
+  },
+  {
+    value: 'Ethiopian',
+    label: 'Ethiopian',
+  },
+  {
+    value: 'American Indian',
+    label: 'American Indian',
+  },
+  {
+    value: 'Malayan',
+    label: 'Malayan',
+  },
+];
 
 class FileUpload extends Component {
 
@@ -44,6 +92,9 @@ class FileUpload extends Component {
       selected_image_base64: '',
       redirect: false,
       loading: false,
+      race: '',
+      age: '',
+      gender: '',
     }
   }
 
@@ -163,7 +214,7 @@ class FileUpload extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, race: '', age: '', gender: '' });
   };
 
   getBase64(file) {
@@ -179,11 +230,27 @@ class FileUpload extends Component {
   }
 
   savePrediction() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, raceError: false, ageError: false, genderError: false });
     const data = new FormData()
+
+    if(this.state.race.trim() == ''){
+      this.setState({ loading: false, raceError: true });
+      return;
+    }
+    if(this.state.age.trim() == ''){
+      this.setState({ loading: false, ageError: true });
+      return;
+    }
+    if(this.state.gender.trim() ==''){
+      this.setState({ loading: false, genderError: true });
+      return;
+    }
     data.append('image', this.state.selectedFile[0]);
     data.append('image_name', this.state.selectedFile[0].name);
     data.append('predicted_disease', this.state.predicted_disease);
+    data.append('race', this.state.race);
+    data.append('age', this.state.age);
+    data.append('gender', this.state.gender);
     axios.post("https://dev.retina.classifier:5000/predictions", data, { withCredentials: true, maxRedirects: 0 })
       .then(res => { // then print response status
         console.log(res)
@@ -201,6 +268,18 @@ class FileUpload extends Component {
         }
         this.setState({ loading: false });
       })
+  }
+
+
+  handleFormChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+
+    switch (name) {
+      case 'race': this.setState({ race: value, raceError: false }); break;
+      case 'age': this.setState({ age: value, ageError: false }); break;
+      case 'gender': this.setState({ gender: value, genderError: false }); break;
+    }
   }
 
   render() {
@@ -257,6 +336,25 @@ class FileUpload extends Component {
                 {this.state.selected_image_base64 ? <img className="prediction-image" src={this.state.selected_image_base64} /> : ''}
                 <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
                 <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
+                <div>
+                  <form className={classes.root} noValidate autoComplete="off">
+                    <TextField select error={this.state.raceError} required id="race" name='race' label="Race" variant="outlined" value={this.state.race} onChange={this.handleFormChange} onBlur={this.handleFormChange}>
+                    {races.map(option => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <TextField error={this.state.ageError} required id="age" name='age' label="Age" type="number" variant="outlined" value={this.state.age} onChange={this.handleFormChange} onBlur={this.handleFormChange} />
+                    <TextField select error={this.state.genderError} required id="gender" name='gender' label="Gender" variant="outlined" value={this.state.gender} onChange={this.handleFormChange} onBlur={this.handleFormChange} >
+                      {genders.map(option => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </form>
+                </div>
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
                   <button type="submit" className="login100-form-btn" disabled={this.state.loading} onClick={() => this.savePrediction()}>

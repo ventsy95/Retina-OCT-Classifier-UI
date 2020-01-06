@@ -69,21 +69,6 @@ const StyledTableRow = withStyles(theme => ({
   },
 }))(TableRow);
 
-const genders = [
-  {
-    value: 'male',
-    label: 'male',
-  },
-  {
-    value: 'female',
-    label: 'female',
-  },
-  {
-    value: 'other',
-    label: 'other',
-  },
-];
-
 class History extends Component {
 
   constructor(props) {
@@ -96,8 +81,6 @@ class History extends Component {
       selected_prediction: null,
       redirect: false,
       person_name: '',
-      age: '',
-      gender: '',
     }
   }
 
@@ -116,7 +99,7 @@ class History extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false, person_name: '', age: '', gender: '' });
+    this.setState({ open: false, person_name: '' });
   };
 
   componentDidMount = () => {
@@ -157,8 +140,6 @@ class History extends Component {
 
     switch (name) {
       case 'fullName': this.setState({ person_name: value }); break;
-      case 'age': this.setState({ age: value }); break;
-      case 'gender': this.setState({ gender: value }); break;
     }
   }
 
@@ -189,6 +170,9 @@ class History extends Component {
                     <TableRow className="history-head">
                       <StyledTableCell>Image name</StyledTableCell>
                       <StyledTableCell>Disease</StyledTableCell>
+                      <StyledTableCell>Age</StyledTableCell>
+                      <StyledTableCell>Gender</StyledTableCell>
+                      <StyledTableCell>Race</StyledTableCell>
                       <StyledTableCell>Date</StyledTableCell>
                       <StyledTableCell></StyledTableCell>
                     </TableRow>
@@ -202,6 +186,9 @@ class History extends Component {
                     <StyledTableRow key={row.record_id} hover>
                       <StyledTableCell component="th" scope="row">{row.image_name}</StyledTableCell>
                       <StyledTableCell>{row.predicted_disease}</StyledTableCell>
+                      <StyledTableCell>{row.age}</StyledTableCell>
+                      <StyledTableCell>{row.gender}</StyledTableCell>
+                      <StyledTableCell>{row.race}</StyledTableCell>
                       <StyledTableCell>{row.prediction_timestamp}</StyledTableCell>
                       <StyledTableCell><button type="button" onClick={() => this.handleOpen(row.record_id)}>
                         <FontAwesomeIcon icon={faFileAlt} size="2x" /></button></StyledTableCell>
@@ -251,14 +238,6 @@ class History extends Component {
                 <div>
                   <form className={classes.root} noValidate autoComplete="off">
                     <TextField id="fullName" name='fullName' label="Full Name" variant="outlined" value={this.state.person_name} onChange={this.handleFormChange} onBlur={this.handleFormChange} />
-                    <TextField id="age" name='age' label="Age" type="number" variant="outlined" value={this.state.age} onChange={this.handleFormChange} onBlur={this.handleFormChange} />
-                    <TextField select id="gender" name='gender' label="Gender" variant="outlined" value={this.state.gender} onChange={this.handleFormChange} onBlur={this.handleFormChange} >
-                      {genders.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
                   </form>
                 </div>
                 <div className="wrap-login100-form-btn">
@@ -268,8 +247,9 @@ class History extends Component {
                     <MyDocument 
                     diagnosis={this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease} 
                     fullName={this.state.person_name} 
-                    age={this.state.age} 
-                    gender={this.state.gender} 
+                    age={this.state.selected_prediction != null && this.state.selected_prediction.age} 
+                    gender={this.state.selected_prediction != null && this.state.selected_prediction.gender} 
+                    race={this.state.selected_prediction != null && this.state.selected_prediction.race} 
                     image={this.state.selected_prediction != null && this.state.selected_prediction.image} />} 
                     fileName="export.pdf" 
                     className="pdf-export-button">

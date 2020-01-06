@@ -43,10 +43,8 @@ class LogIn extends Component {
         setTimeout(() => {
           this.setState({ loading: false });
         }, 1000)
-        console.log(res.headers)
         localStorage.setItem('isLoggedIn', true);
         this.setState({ redirect: true });
-        console.log("REDIRECT TO INDEX PAGE")
       })
       .catch((err) => {
         setTimeout(() => {

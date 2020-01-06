@@ -56,6 +56,7 @@ const MyDocument = (props) => (
                     ))}
                     <Text style={styles.boldText}>Age: <Text style={styles.text}>{props.age}</Text></Text>
                     <Text style={styles.boldText}>Gender: <Text style={styles.text}>{props.gender}</Text></Text>
+                    <Text style={styles.boldText}>Race: <Text style={styles.text}>{props.race}</Text></Text>
                 </View>
             </View>
             {props.diagnosis == 'CNV' &&
