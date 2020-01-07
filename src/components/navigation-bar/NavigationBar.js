@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './NavigationBar.css';
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
 
 class NavigationBar extends Component {
@@ -22,7 +22,7 @@ class NavigationBar extends Component {
             toast.info("Successfully logged out.")
           })
           .catch(err => {
-            if (err.response != undefined && err.response.status == 302) {
+            if (err.response !== undefined && err.response.status === 302) {
               this.setState({ redirect: true })
               localStorage.setItem('isLoggedIn', false);
               toast.error("Unauthorized.")
@@ -41,14 +41,14 @@ class NavigationBar extends Component {
 
         return (
             <div className="hero-anime">
-                { localStorage.getItem('isLoggedIn') == 'true' &&
+                { localStorage.getItem('isLoggedIn') === 'true' &&
                 <div className="navigation-wrap bg-light start-header start-style">
                     <div className="container">
                         <div className="row">
                             <div className="col-12">
                                 <nav className="navbar navbar-expand-md navbar-light">
 
-                                    <a className="navbar-brand" target="_blank"><img src="https://i.ibb.co/XFW0r4J/vision.png" alt="vision" border="0" /></a>
+                                    <a className="navbar-brand" href="#/"><img src="https://i.ibb.co/XFW0r4J/vision.png" alt="vision" border="0" /></a>
 
                                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                         <span className="navbar-toggler-icon"></span>

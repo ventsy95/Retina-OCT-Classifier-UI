@@ -59,7 +59,7 @@ const MyDocument = (props) => (
                     <Text style={styles.boldText}>Race: <Text style={styles.text}>{props.race}</Text></Text>
                 </View>
             </View>
-            {props.diagnosis == 'CNV' &&
+            {props.diagnosis === 'CNV' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.CNV_TITLE}</Text>
                     <Text style={styles.boldText}>What is CNV?</Text>
@@ -68,7 +68,7 @@ const MyDocument = (props) => (
                     <Text style={styles.infoText}>{Constants.CNV_TREATMENT}</Text>
                 </View>
             }
-            {props.diagnosis == 'DME' &&
+            {props.diagnosis === 'DME' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.DME_TITLE}</Text>
                     <Text style={styles.boldText}>What is DME?</Text>
@@ -77,7 +77,7 @@ const MyDocument = (props) => (
                     <Text style={styles.infoText}>{Constants.DME_TREATMENT}</Text>
                 </View>
             }
-            {props.diagnosis == 'DRUSEN' &&
+            {props.diagnosis === 'DRUSEN' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.DRUSEN_TITLE}</Text>
                     <Text style={styles.boldText}>What is DRUSEN?</Text>
@@ -86,7 +86,7 @@ const MyDocument = (props) => (
                     <Text style={styles.infoText}>{Constants.DRUSEN_TREATMENT}</Text>
                 </View>
             }
-            {props.diagnosis == 'CSR' &&
+            {props.diagnosis === 'CSR' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.CSR_TITLE}</Text>
                     <Text style={styles.boldText}>What is CSR?</Text>
@@ -95,7 +95,7 @@ const MyDocument = (props) => (
                     <Text style={styles.infoText}>{Constants.CSR_TREATMENT}</Text>
                 </View>
             }
-            {props.diagnosis == 'MH' &&
+            {props.diagnosis === 'MH' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.MH_TITLE}</Text>
                     <Text style={styles.boldText}>What is MH?</Text>
@@ -104,7 +104,7 @@ const MyDocument = (props) => (
                     <Text style={styles.infoText}>{Constants.MH_TREATMENT}</Text>
                 </View>
             }
-            {props.diagnosis == 'NORMAL' &&
+            {props.diagnosis === 'NORMAL' &&
                 <View>
                     <Text style={styles.boldText}>{Constants.NORMAL_TITLE}</Text>
                 </View>

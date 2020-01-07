@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
 
 class ProtectedRoute extends Component {
 
@@ -18,7 +17,7 @@ class ProtectedRoute extends Component {
             <Route
                 {...props}
                 render={props => (
-                    localStorage.getItem('isLoggedIn') == 'true' ?
+                    localStorage.getItem('isLoggedIn') === 'true' ?
                         <Component {...props} /> :
                         <Redirect to='/login' />
                 )}

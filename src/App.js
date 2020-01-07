@@ -6,8 +6,8 @@ import RegistrationForm from './components/register/RegistrationForm'
 import LogIn from './components/login/LogIn'
 import History from './components/history/History'
 import ProtectedRoute from './components/protected-route/ProtectedRoute'
-import { Route, NavLink, HashRouter, Switch } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { Route, Switch } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Spinner from './components/spinner-component/Spinner';
 import AppStore from "./AppStore";
 
@@ -29,7 +29,6 @@ class App extends Component {
   }
 
   updateSpinnerState = () => {
-    console.log("UPDATE STATE")
     this.setState({ loading: AppStore.isAppLoading() })
   };
 
@@ -37,7 +36,7 @@ class App extends Component {
     return (
       <div>
         { this.state.loading && <Spinner /> }
-        <div className={this.state.loading && 'section-blur' || ''}>
+        <div className={(this.state.loading && 'section-blur') || ''}>
           <AnimatePresence>
             <Switch>
               <Route path='/login' component={LogIn} />

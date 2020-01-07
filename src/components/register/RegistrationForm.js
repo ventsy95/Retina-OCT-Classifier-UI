@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { NavLink } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +8,7 @@ import { Redirect } from 'react-router-dom';
 import { motion } from "framer-motion";
 
 const validEmailRegex =
-  RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+  RegExp(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i);
 
 const validateForm = (errors) => {
   let valid = true;
@@ -21,8 +20,8 @@ const validateForm = (errors) => {
 }
 
 const validateEmptyForm = (state) => {
-  if ((state.email == null || state.email.length == 0) || (state.fullName == null || state.fullName.length == 0)
-    || (state.password == null || state.password.length == 0) || (state.confirmPassword == null || state.confirmPassword.length == 0)) {
+  if ((state.email == null || state.email.length === 0) || (state.fullName == null || state.fullName.length === 0)
+    || (state.password == null || state.password.length === 0) || (state.confirmPassword == null || state.confirmPassword.length === 0)) {
     return false;
   }
   return true;
@@ -111,8 +110,7 @@ class RegistrationForm extends Component {
       bodyFormData.set('password', this.state.password)
 
       axios.post("https://dev.retina.classifier:5000/signup", bodyFormData)
-        .then(res => { // then print response status
-          console.log(res)
+        .then(res => {
           toast.success('Successful registration.', {
             autoClose: 3000,
             onClose: () => {
@@ -121,7 +119,7 @@ class RegistrationForm extends Component {
             }
           });
         })
-        .catch((err) => { // then print response status
+        .catch((err) => {
           if (err.response.status === 409) {
             toast.error("Email is already registered.")
           } else {

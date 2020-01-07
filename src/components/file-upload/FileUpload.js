@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './FileUpload.css';
@@ -10,7 +9,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
-import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
 import { motion } from "framer-motion";
@@ -109,8 +108,8 @@ class FileUpload extends Component {
         localStorage.setItem('isLoggedIn', true);
         AppActions.isLoading(false);
       })
-      .catch(err => { // then print response status
-        if (err.response != undefined && err.response.status == 302) {
+      .catch(err => {
+        if (err.response !== undefined && err.response.status === 302) {
           this.setState({ redirect: true })
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
@@ -190,15 +189,15 @@ class FileUpload extends Component {
       data.append('image', this.state.selectedFile[x])
     }
     axios.post("https://dev.retina.classifier:5000/predict", data, { withCredentials: true })
-      .then(res => { // then print response status
+      .then(res => {
         this.setState({ predicted_disease: res.data[0].predicted_disease });
         this.getBase64(this.state.selectedFile[0]);
         AppActions.isLoading(false);
         this.handleOpen()
         toast.success('upload success');
       })
-      .catch(err => { // then print response status
-        if (err.response != undefined && err.response.status == 302) {
+      .catch(err => {
+        if (err.response !== undefined && err.response.status === 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
@@ -221,7 +220,6 @@ class FileUpload extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log(reader.result)
       this.setState({ selected_image_base64: reader.result });
     };
     reader.onerror = function (error) {
@@ -233,15 +231,15 @@ class FileUpload extends Component {
     this.setState({ loading: true, raceError: false, ageError: false, genderError: false });
     const data = new FormData()
 
-    if(this.state.race.trim() == ''){
+    if(this.state.race.trim() === ''){
       this.setState({ loading: false, raceError: true });
       return;
     }
-    if(this.state.age.trim() == ''){
+    if(this.state.age.trim() === ''){
       this.setState({ loading: false, ageError: true });
       return;
     }
-    if(this.state.gender.trim() ==''){
+    if(this.state.gender.trim() ===''){
       this.setState({ loading: false, genderError: true });
       return;
     }
@@ -252,14 +250,13 @@ class FileUpload extends Component {
     data.append('age', this.state.age);
     data.append('gender', this.state.gender);
     axios.post("https://dev.retina.classifier:5000/predictions", data, { withCredentials: true, maxRedirects: 0 })
-      .then(res => { // then print response status
-        console.log(res)
+      .then(res => {
         toast.success(res.data);
         this.handleClose();
         this.setState({ loading: false });
       })
-      .catch(err => { // then print response status
-        if (err.response != undefined && err.response.status == 302) {
+      .catch(err => {
+        if (err.response !== undefined && err.response.status === 302) {
           this.setState({ redirect: true });
           localStorage.setItem('isLoggedIn', false);
           toast.error("Unauthorized.")
@@ -279,6 +276,7 @@ class FileUpload extends Component {
       case 'race': this.setState({ race: value, raceError: false }); break;
       case 'age': this.setState({ age: value, ageError: false }); break;
       case 'gender': this.setState({ gender: value, genderError: false }); break;
+      default: console.log("Unsupported event.");
     }
   }
 
@@ -333,7 +331,7 @@ class FileUpload extends Component {
                     <FontAwesomeIcon icon={faTimes} size="2x" />
                   </button>
                 </div>
-                {this.state.selected_image_base64 ? <img className="prediction-image" src={this.state.selected_image_base64} /> : ''}
+                {this.state.selected_image_base64 ? <img className="prediction-image" alt="retina-oct" src={this.state.selected_image_base64} /> : ''}
                 <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
                 <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
                 <div>

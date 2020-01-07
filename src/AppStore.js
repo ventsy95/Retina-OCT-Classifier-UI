@@ -10,7 +10,6 @@ class AppStore extends EventEmitter {
     }
 
     handleActions(action) {
-        console.log(action.value)
         switch (action.type) {
             case AppActions.APP_ACTIONS.IS_LOADING: {
                 this.isLoading = action.value;

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './History.css';
-import { withStyles, makeStyles, styled } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,15 +18,13 @@ import { faFileAlt } from '@fortawesome/fontawesome-free-regular'
 import { faTimes } from '@fortawesome/fontawesome-free-solid'
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem'
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import * as AppActions from "../../AppActions";
-import ReactDOM from '@react-pdf/renderer';
 import MyDocument from '../pdf/MyDocument'
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
@@ -94,7 +92,7 @@ class History extends Component {
   };
 
   handleOpen = (record_id) => {
-    let matching = this.state.predictions.filter(row => row.record_id == record_id)
+    let matching = this.state.predictions.filter(row => row.record_id === record_id)
     this.setState({ selected_prediction: matching[0], open: true });
   };
 
@@ -109,7 +107,7 @@ class History extends Component {
 
   getHistoryOfPredictions = () => {
     axios.get("https://dev.retina.classifier:5000/predictions", { withCredentials: true })
-      .then(res => { // then print response status
+      .then(res => {
         res.data = res.data.sort(function (var1, var2) {
           var a = new Date(var1.prediction_timestamp), b = new Date(var2.prediction_timestamp);
           if (a > b)
@@ -122,12 +120,12 @@ class History extends Component {
         this.setState({ predictions: res.data })
         AppActions.isLoading(false);
       })
-      .catch(err => { // then print response status
-        if (err.response != undefined && err.response.status == 302) {
+      .catch(err => {
+        if (err.response !== undefined && err.response.status === 302) {
           toast.error("Unauthorized.")
           localStorage.setItem('isLoggedIn', false);
           this.setState({ redirect: true });
-        } else if(err.message != undefined){
+        } else if(err.message !== undefined){
           toast.error(err.message)
         }
         AppActions.isLoading(false);
@@ -140,6 +138,7 @@ class History extends Component {
 
     switch (name) {
       case 'fullName': this.setState({ person_name: value }); break;
+      default: console.log("Unsupported event.");
     }
   }
 
@@ -233,7 +232,7 @@ class History extends Component {
                     <FontAwesomeIcon icon={faTimes} size="2x" />
                   </button>
                 </div>
-                {this.state.selected_prediction ? <img className="prediction-image" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
+                {this.state.selected_prediction ? <img className="prediction-image" alt="retina-oct" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
                 <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
                 <div>
                   <form className={classes.root} noValidate autoComplete="off">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Spinner.css';
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 class Spinner extends Component {
 

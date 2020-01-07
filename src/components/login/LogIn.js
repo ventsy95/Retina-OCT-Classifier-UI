@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner, faLongArrowAltRight } from '@fortawesome/fontawesome-free-solid'
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { faSpinner } from '@fortawesome/fontawesome-free-solid'
+import { NavLink } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import './LogIn.css';
@@ -51,7 +50,7 @@ class LogIn extends Component {
           this.setState({ loading: false });
         }, 1000)
 
-        if (err.response != undefined && err.response.status === 400) {
+        if (err.response !== undefined && err.response.status === 400) {
           toast.error("Invalid credentials.")
         } else {
           toast.error(err.message)
@@ -62,7 +61,7 @@ class LogIn extends Component {
   render() {
     const { redirect } = this.state
 
-    if (redirect || localStorage.getItem('isLoggedIn') == 'true') {
+    if (redirect || localStorage.getItem('isLoggedIn') === 'true') {
       return <Redirect to="/fileUpload" push={true} />
     }
 
