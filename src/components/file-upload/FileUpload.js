@@ -214,7 +214,7 @@ class FileUpload extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false, race: '', age: '', gender: '' });
+    this.setState({ open: false, race: '', age: '', gender: '', selected_image_base64: '' });
   };
 
   getBase64(file) {

@@ -99,7 +99,7 @@ class History extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false, person_name: '' });
+    this.setState({ open: false, person_name: '', selected_prediction: null });
   };
 
   componentDidMount = () => {
@@ -123,11 +123,11 @@ class History extends Component {
         AppActions.isLoading(false);
       })
       .catch(err => { // then print response status
-        if (err.response.status == 302) {
+        if (err.response != undefined && err.response.status == 302) {
           toast.error("Unauthorized.")
           localStorage.setItem('isLoggedIn', false);
           this.setState({ redirect: true });
-        } else {
+        } else if(err.message != undefined){
           toast.error(err.message)
         }
         AppActions.isLoading(false);
