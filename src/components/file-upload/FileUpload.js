@@ -162,7 +162,7 @@ class FileUpload extends Component {
       if (files[x].size > size) {
         err[x] = files[x].type + 'is too large, please pick a smaller file\n';
       }
-    };
+    }
     for (var z = 0; z < err.length; z++) {// if message not same old that mean has error 
       // discard selected file
       toast.error(err[z])
@@ -172,11 +172,11 @@ class FileUpload extends Component {
   }
 
   onChangeHandler = event => {
-    var files = event.target.files
+
     if (this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)) {
       // if return true allow to setState
       this.setState({
-        selectedFile: files,
+        selectedFile: event.target.files,
         loaded: 0,
       })
     }
@@ -191,7 +191,13 @@ class FileUpload extends Component {
     axios.post("https://dev.retina.classifier:5000/predict", data, { withCredentials: true })
       .then(res => {
         this.setState({ predicted_disease: res.data[0].predicted_disease });
-        this.getBase64(this.state.selectedFile[0]);
+        if(res.data[0].prediction_image !== undefined){
+          console.log(res.data[0].prediction_image)
+          this.setState({ selected_image_base64: res.data[0].prediction_image})
+        }else{
+          this.getBase64(this.state.selectedFile[0]);
+        }
+        
         AppActions.isLoading(false);
         this.handleOpen()
         toast.success('upload success');
@@ -332,11 +338,11 @@ class FileUpload extends Component {
                   </button>
                 </div>
                 {this.state.selected_image_base64 ? <img className="prediction-image" alt="retina-oct" src={this.state.selected_image_base64} /> : ''}
-                <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0].name}</h2>
+                <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0]!=undefined && this.state.selectedFile[0].name}</h2>
                 <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
                 <div>
                   <form className={classes.root} noValidate autoComplete="off">
-                    <TextField select error={this.state.raceError} required id="race" name='race' label="Race" variant="outlined" value={this.state.race} onChange={this.handleFormChange} onBlur={this.handleFormChange}>
+                    <TextField select error={this.state.raceError} required id="race" name='race' label="Ethnicity" variant="outlined" value={this.state.race} onChange={this.handleFormChange} onBlur={this.handleFormChange}>
                     {races.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}

@@ -31,6 +31,7 @@
     "react-scripts": "3.3.0",
     "react-show": "^3.0.4",
     "react-toastify": "^5.4.1",
+    "reactide-config": "^1.0.2",
     "reactstrap": "^8.2.0"
   },
   "scripts": {

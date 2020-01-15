@@ -115,7 +115,7 @@
 }
 
 input[type=file]::-webkit-file-upload-button {
-  margin-top: 20%;
+  margin-top: 30%;
 }
 
 .prediction-image{

@@ -14,7 +14,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt } from '@fortawesome/fontawesome-free-regular'
+import { faFileAlt, faTrashAlt } from '@fortawesome/fontawesome-free-regular'
 import { faTimes } from '@fortawesome/fontawesome-free-solid'
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
@@ -132,6 +132,36 @@ class History extends Component {
       })
   }
 
+  deleteRecord = (record) => {
+    AppActions.isLoading(true);
+    const data = new FormData()
+    data.append('predicted_disease', record.predicted_disease);
+    data.append('age', record.age);
+    data.append('race', record.race);
+    data.append('gender', record.gender);
+    data.append('record_id', record.record_id);
+    axios.post("https://dev.retina.classifier:5000/delete-prediction", data, { withCredentials: true })
+      .then(res => {
+        var array = [...this.state.predictions]; // make a separate copy of the array
+        var index = array.indexOf(record)
+        if (index !== -1) {
+          array.splice(index, 1);
+          this.setState({predictions: array});
+        }
+        AppActions.isLoading(false);
+      })
+      .catch(err => {
+        if (err.response !== undefined && err.response.status === 302) {
+          toast.error("Unauthorized.")
+          localStorage.setItem('isLoggedIn', false);
+          this.setState({ redirect: true });
+        } else if(err.message !== undefined){
+          toast.error(err.message)
+        }
+        AppActions.isLoading(false);
+      })
+  };
+
   handleFormChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -171,8 +201,9 @@ class History extends Component {
                       <StyledTableCell>Disease</StyledTableCell>
                       <StyledTableCell>Age</StyledTableCell>
                       <StyledTableCell>Gender</StyledTableCell>
-                      <StyledTableCell>Race</StyledTableCell>
+                      <StyledTableCell>Ethnicity</StyledTableCell>
                       <StyledTableCell>Date</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
                       <StyledTableCell></StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -191,6 +222,8 @@ class History extends Component {
                       <StyledTableCell>{row.prediction_timestamp}</StyledTableCell>
                       <StyledTableCell><button type="button" onClick={() => this.handleOpen(row.record_id)}>
                         <FontAwesomeIcon icon={faFileAlt} size="2x" /></button></StyledTableCell>
+                      <StyledTableCell><button type="button" onClick={() => this.deleteRecord(row)}>
+                        <FontAwesomeIcon icon={faTrashAlt} size="2x" /></button></StyledTableCell>
                     </StyledTableRow>
                   ))}
                 </TableBody>
