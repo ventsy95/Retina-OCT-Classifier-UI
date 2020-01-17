@@ -149,6 +149,7 @@ class History extends Component {
           this.setState({predictions: array});
         }
         AppActions.isLoading(false);
+        toast.success("Successfully deleted record.");
       })
       .catch(err => {
         if (err.response !== undefined && err.response.status === 302) {
@@ -192,7 +193,6 @@ class History extends Component {
             {predictions != null && predictions.length === 0 &&
               <span className="empty-history-text">Your history does not contain any records.</span>}
             <TableContainer component={Paper}>
-              <ToastContainer />
               <Table aria-label="customized table">
                 {predictions != null && predictions.length > 0 &&
                   <TableHead>

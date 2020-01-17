@@ -308,7 +308,6 @@ class FileUpload extends Component {
                 <input type="file" className="form-control" accept="image/*" onChange={this.onChangeHandler} />
               </div>
               <div className="form-group">
-                <ToastContainer />
               </div>
               <div className="wrap-login100-form-btn">
                 <div className="login100-form-bgbtn"></div>

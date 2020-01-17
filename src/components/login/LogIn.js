@@ -67,7 +67,6 @@ class LogIn extends Component {
 
     return (
       <motion.div className="limiter" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <ToastContainer />
         <div className="container-login100">
           <div className="login100-more"></div>
           <div className="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">

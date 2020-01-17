@@ -148,7 +148,6 @@ class RegistrationForm extends Component {
             <section className="signup">
               <div className="reg-container">
                 <div className="signup-content">
-                  <ToastContainer />
                   <form method="POST" id="signup-form" className="signup-form" onSubmit={this.handleSubmit} noValidate>
                     <h2 className="form-title">Create account</h2>
                     <div className="form-group">

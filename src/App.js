@@ -10,6 +10,7 @@ import { Route, Switch } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Spinner from './components/spinner-component/Spinner';
 import AppStore from "./AppStore";
+import { ToastContainer, toast } from 'react-toastify';
 
 class App extends Component {
 
@@ -35,6 +36,7 @@ class App extends Component {
   render() {
     return (
       <div>
+      <ToastContainer />
         { this.state.loading && <Spinner /> }
         <div className={(this.state.loading && 'section-blur') || ''}>
           <AnimatePresence>
