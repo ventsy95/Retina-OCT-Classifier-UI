@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { NavLink } from "react-router-dom";
@@ -62,7 +62,7 @@ class LogIn extends Component {
     const { redirect } = this.state
 
     if (redirect || localStorage.getItem('isLoggedIn') === 'true') {
-      return <Redirect to="/fileUpload" push={true} />
+      return <Redirect to="/" push={true} />
     }
 
     return (
