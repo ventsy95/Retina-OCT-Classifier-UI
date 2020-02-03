@@ -62,7 +62,7 @@ class LogIn extends Component {
     const { redirect } = this.state
 
     if (redirect || localStorage.getItem('isLoggedIn') === 'true') {
-      return <Redirect to="/" push={true} />
+      return <Redirect to="/home" push={true} />
     }
 
     return (
@@ -77,13 +77,13 @@ class LogIn extends Component {
 
               <div className="wrap-input100 validate-input">
                 <span className="label-input100">Email</span>
-                <input className="input100" type="email" name="email" onBlur={this.handleChange} placeholder="Email address..." required />
+                <input className="input100" type="email" name="email" onChange={this.handleChange} placeholder="Email address..." required />
                 <span className="focus-input100"></span>
               </div>
 
               <div className="wrap-input100 validate-input" data-validate="Password is required">
                 <span className="label-input100">Password</span>
-                <input className="input100" type="password" name="password" onBlur={this.handleChange} placeholder="*************" required />
+                <input className="input100" type="password" name="password" onChange={this.handleChange} placeholder="*************" required />
                 <span className="focus-input100"></span>
               </div>
 

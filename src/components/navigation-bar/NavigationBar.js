@@ -48,7 +48,7 @@ class NavigationBar extends Component {
                             <div className="col-12">
                                 <nav className="navbar navbar-expand-md navbar-light">
 
-                                    <a className="navbar-brand" href="#/"><img src="https://i.ibb.co/XFW0r4J/vision.png" alt="vision" border="0" /></a>
+                                    <a className="navbar-brand" href="#/home"><img src="https://i.ibb.co/XFW0r4J/vision.png" alt="vision" border="0" /></a>
 
                                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                         <span className="navbar-toggler-icon"></span>
@@ -57,7 +57,7 @@ class NavigationBar extends Component {
                                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                         <ul className="navbar-nav ml-auto py-4 py-md-0">
                                             <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                                                <NavLink className="nav-link" to="/">Home</NavLink>
+                                                <NavLink className="nav-link" to="/home">Home</NavLink>
                                             </li>
                                             <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                                                 <NavLink className="nav-link" to="/fileUpload">Diagnose</NavLink>

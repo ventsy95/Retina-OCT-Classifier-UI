@@ -72,9 +72,10 @@ tr.history-head{
     text-align: center;
   }
 
-  .history-container{
+  .home-container{
     width: 90%;
     margin-left: 5%;
+    margin-top: 3%;
   }
 
   .prediction-image{

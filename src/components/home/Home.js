@@ -7,8 +7,9 @@ import { Redirect } from 'react-router-dom';
 import NavigationBar from '../navigation-bar/NavigationBar';
 import { motion } from "framer-motion";
 import * as AppActions from "../../AppActions";
+import Blog from "./blog/Blog"
 
-class History extends Component {
+class Home extends Component {
 
   constructor(props) {
     super(props);
@@ -52,12 +53,12 @@ class History extends Component {
         <div className="top-nav">
           <NavigationBar />
         </div>
-        <div className="history-container">
-         
+        <div className="home-container">
+         <Blog></Blog>
         </div>
       </motion.div>
     );
   }
 }
 
-export default History;
+export default Home;

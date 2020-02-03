@@ -266,7 +266,8 @@ class History extends Component {
                   </button>
                 </div>
                 {this.state.selected_prediction ? <img className="prediction-image" alt="retina-oct" src={`data:image/png;base64,${this.state.selected_prediction.image}`} /> : ''}
-                <h2 id="transition-modal-title">{this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
+                <h5 id="transition-modal-title">Image name: {this.state.selected_prediction != null && this.state.selected_prediction.image_name}</h5>
+                <h2 id="transition-modal-title">Disease: {this.state.selected_prediction != null && this.state.selected_prediction.predicted_disease}</h2>
                 <div>
                   <form className={classes.root} noValidate autoComplete="off">
                     <TextField id="fullName" name='fullName' label="Full Name" variant="outlined" value={this.state.person_name} onChange={this.handleFormChange} onBlur={this.handleFormChange} />

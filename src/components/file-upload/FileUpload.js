@@ -191,13 +191,13 @@ class FileUpload extends Component {
     axios.post("https://dev.retina.classifier:5000/predict", data, { withCredentials: true })
       .then(res => {
         this.setState({ predicted_disease: res.data[0].predicted_disease });
-        if(res.data[0].prediction_image !== undefined){
+        if (res.data[0].prediction_image !== undefined) {
           console.log(res.data[0].prediction_image)
-          this.setState({ selected_image_base64: res.data[0].prediction_image})
-        }else{
+          this.setState({ selected_image_base64: res.data[0].prediction_image })
+        } else {
           this.getBase64(this.state.selectedFile[0]);
         }
-        
+
         AppActions.isLoading(false);
         this.handleOpen()
         toast.success('upload success');
@@ -237,15 +237,15 @@ class FileUpload extends Component {
     this.setState({ loading: true, raceError: false, ageError: false, genderError: false });
     const data = new FormData()
 
-    if(this.state.race.trim() === ''){
+    if (this.state.race.trim() === '') {
       this.setState({ loading: false, raceError: true });
       return;
     }
-    if(this.state.age.trim() === ''){
+    if (this.state.age.trim() === '') {
       this.setState({ loading: false, ageError: true });
       return;
     }
-    if(this.state.gender.trim() ===''){
+    if (this.state.gender.trim() === '') {
       this.setState({ loading: false, genderError: true });
       return;
     }
@@ -296,7 +296,7 @@ class FileUpload extends Component {
     }
 
     return (
-      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <div className="top-nav">
           <NavigationBar />
         </div>
@@ -337,12 +337,12 @@ class FileUpload extends Component {
                   </button>
                 </div>
                 {this.state.selected_image_base64 ? <img className="prediction-image" alt="retina-oct" src={this.state.selected_image_base64} /> : ''}
-                <h2 id="transition-modal-title">{this.state.selectedFile != null && this.state.selectedFile[0]!=undefined && this.state.selectedFile[0].name}</h2>
-                <h2 id="transition-modal-title">{this.state.predicted_disease}</h2>
+                <h5 id="transition-modal-title">Image name: {this.state.selectedFile != null && this.state.selectedFile[0] != undefined && this.state.selectedFile[0].name}</h5>
+                <h2 id="transition-modal-title">Disease: {this.state.predicted_disease}</h2>
                 <div>
                   <form className={classes.root} noValidate autoComplete="off">
                     <TextField select error={this.state.raceError} required id="race" name='race' label="Ethnicity" variant="outlined" value={this.state.race} onChange={this.handleFormChange} onBlur={this.handleFormChange}>
-                    {races.map(option => (
+                      {races.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
@@ -361,8 +361,8 @@ class FileUpload extends Component {
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
                   <button type="submit" className="login100-form-btn" disabled={this.state.loading} onClick={() => this.savePrediction()}>
-                  {this.state.loading && <FontAwesomeIcon icon={faSpinner} spin size="2x" />}
-                  {!this.state.loading && <span>Save</span>}
+                    {this.state.loading && <FontAwesomeIcon icon={faSpinner} spin size="2x" />}
+                    {!this.state.loading && <span>Save</span>}
                   </button>
                 </div>
               </div>

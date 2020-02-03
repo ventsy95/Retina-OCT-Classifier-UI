@@ -46,7 +46,7 @@ class App extends Component {
               <Route path="/register" component={RegistrationForm} />
               <div className="main-content">
                 <div className="content">
-                  <ProtectedRoute path="/" component={Home} />
+                  <ProtectedRoute path="/home" component={Home} />
                   <ProtectedRoute path="/fileUpload" component={FileUpload} />
                   <ProtectedRoute path="/history" component={History} />
                 </div>
