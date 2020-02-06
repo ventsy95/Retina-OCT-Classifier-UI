@@ -97,7 +97,7 @@ class FileUpload extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.isLoggedIn();
   }
 
